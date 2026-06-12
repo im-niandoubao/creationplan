@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <circle cx="60" cy="60" r="56" fill="#4A90D9" />
+  <circle cx="60" cy="60" r="42" fill="#5BA0E9" opacity="0.6" />
+  <text x="60" y="68" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="28" font-weight="bold" fill="white">豆包</text>
+</svg>
