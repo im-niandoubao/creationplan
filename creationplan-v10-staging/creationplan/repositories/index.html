@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>造物库 · 粘豆包</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/logo.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    /* ============================================
+       造物库 · 星空背景 + 大搜索框 + 项目卡片网格
+       ============================================ */
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --deep-1: #0a0e27;
+      --deep-2: #1a1240;
+      --deep-3: #2d1b4e;
+      --gold: #FFD66B;
+      --pink: #FF8FA3;
+      --purple: #B79DFF;
+      --text: #ffffff;
+      --text-soft: rgba(255, 255, 255, 0.7);
+      --text-mute: rgba(255, 255, 255, 0.45);
+      --glass: rgba(255, 255, 255, 0.06);
+      --glass-border: rgba(255, 255, 255, 0.14);
+      --glass-hover: rgba(255, 255, 255, 0.12);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--text);
+      background: var(--deep-1);
+      min-height: 100vh;
+      overflow-x: hidden;
+      padding-bottom: 80px;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    .display { font-family: 'ZCOOL KuaiLe', cursive; letter-spacing: 0.04em; }
+
+    /* ============================================
+       星空背景：3 层视差（星云 + 大星 + 小星 + 流星）
+       ============================================ */
+    .starfield {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background:
+        radial-gradient(ellipse at 20% 30%, rgba(183, 157, 255, 0.18) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 70%, rgba(255, 143, 163, 0.12) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 100%, rgba(91, 123, 245, 0.15) 0%, transparent 60%),
+        linear-gradient(180deg, var(--deep-1) 0%, var(--deep-2) 60%, var(--deep-3) 100%);
+      overflow: hidden;
+    }
+
+    /* 100+ 颗小星：box-shadow trick, 1 个元素渲染 N 颗 */
+    .stars {
+      position: absolute;
+      top: 0; left: 0;
+      width: 1px; height: 1px;
+      background: transparent;
+    }
+    .stars-s, .stars-m, .stars-l {
+      animation: twinkle 4s ease-in-out infinite;
+    }
+    .stars-s { box-shadow:
+      23px 47px #fff, 89px 123px #fff, 156px 89px #fff, 234px 167px #fff,
+      312px 234px #fff, 389px 56px #fff, 456px 312px #fff, 534px 178px #fff,
+      612px 267px #fff, 689px 89px #fff, 767px 345px #fff, 845px 123px #fff,
+      923px 234px #fff, 1001px 167px #fff, 1078px 289px #fff, 1156px 78px #fff,
+      1234px 312px #fff, 1312px 156px #fff, 1389px 234px #fff, 1467px 67px #fff,
+      1545px 289px #fff, 1623px 178px #fff, 1700px 312px #fff, 1778px 89px #fff,
+      1856px 234px #fff, 1934px 156px #fff, 2011px 267px #fff, 2089px 78px #fff,
+      45px 423px #fff, 134px 489px #fff, 256px 534px #fff, 367px 478px #fff,
+      478px 556px #fff, 589px 423px #fff, 700px 512px #fff, 812px 467px #fff,
+      923px 545px #fff, 1034px 489px #fff, 1145px 567px #fff, 1256px 423px #fff,
+      1367px 534px #fff, 1478px 478px #fff, 1589px 556px #fff, 1700px 423px #fff,
+      1811px 512px #fff, 1922px 467px #fff, 2033px 545px #fff, 2144px 489px #fff,
+      78px 678px #fff, 189px 734px #fff, 300px 712px #fff, 411px 789px #fff,
+      523px 656px #fff, 634px 745px #fff, 745px 678px #fff, 856px 756px #fff,
+      967px 712px #fff, 1078px 789px #fff, 1189px 656px #fff, 1300px 745px #fff,
+      1411px 678px #fff, 1522px 756px #fff, 1633px 712px #fff, 1744px 789px #fff,
+      134px 856px #fff, 245px 923px #fff, 356px 889px #fff, 467px 956px #fff,
+      578px 845px #fff, 689px 923px #fff, 800px 889px #fff, 911px 956px #fff;
+    }
+    .stars-m { width: 2px; height: 2px; box-shadow:
+      100px 200px rgba(255, 214, 107, 0.9),
+      345px 78px rgba(255, 214, 107, 0.9),
+      567px 289px rgba(255, 214, 107, 0.9),
+      789px 156px rgba(255, 214, 107, 0.9),
+      1011px 234px rgba(255, 214, 107, 0.9),
+      1233px 89px rgba(255, 214, 107, 0.9),
+      1455px 312px rgba(255, 214, 107, 0.9),
+      178px 478px rgba(255, 214, 107, 0.9),
+      400px 556px rgba(255, 214, 107, 0.9),
+      622px 423px rgba(255, 214, 107, 0.9),
+      844px 534px rgba(255, 214, 107, 0.9),
+      1066px 478px rgba(255, 214, 107, 0.9),
+      1288px 567px rgba(255, 214, 107, 0.9),
+      289px 712px rgba(255, 214, 107, 0.9),
+      511px 789px rgba(255, 214, 107, 0.9),
+      733px 678px rgba(255, 214, 107, 0.9),
+      955px 756px rgba(255, 214, 107, 0.9),
+      1177px 712px rgba(255, 214, 107, 0.9);
+      animation-delay: -2s;
+    }
+    .stars-l { width: 2.5px; height: 2.5px; box-shadow:
+      234px 167px #fff,
+      689px 423px #fff,
+      1145px 267px #fff,
+      1611px 534px #fff,
+      378px 789px #fff,
+      834px 656px #fff;
+      animation-delay: -3s;
+      animation-duration: 5s;
+    }
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; }
+      50%      { opacity: 1; }
+    }
+
+    /* 流星：1 个元素 8 秒划过一次 */
+    .shooting-star {
+      position: absolute;
+      top: 15%;
+      left: -10%;
+      width: 120px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #fff, transparent);
+      border-radius: 999px;
+      filter: drop-shadow(0 0 4px #fff);
+      transform: rotate(15deg);
+      animation: shoot 8s linear infinite;
+      animation-delay: 2s;
+      opacity: 0;
+    }
+    .shooting-star::before {
+      content: '';
+      position: absolute;
+      right: 0; top: -1px;
+      width: 4px; height: 4px;
+      background: #fff;
+      border-radius: 50%;
+      box-shadow: 0 0 8px 2px rgba(255, 255, 255, 0.8);
+    }
+    .shooting-star.s2 {
+      top: 45%;
+      animation-delay: 6s;
+      animation-duration: 10s;
+    }
+    @keyframes shoot {
+      0%   { transform: translateX(0) translateY(0) rotate(15deg); opacity: 0; }
+      5%   { opacity: 1; }
+      20%  { transform: translateX(120vw) translateY(30vh) rotate(15deg); opacity: 0; }
+      100% { transform: translateX(120vw) translateY(30vh) rotate(15deg); opacity: 0; }
+    }
+
+    /* ============================================
+       顶部导航
+       ============================================ */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 24px;
+      background: rgba(10, 14, 39, 0.55);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .back-home {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px 6px 11px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 999px;
+      color: var(--text);
+      font-family: 'ZCOOL KuaiLe', cursive;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+    .back-home:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateX(-2px);
+      color: var(--gold);
+    }
+    .back-home svg {
+      width: 16px; height: 16px;
+      stroke: currentColor; fill: none;
+      stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round;
+    }
+    .topbar-title {
+      flex: 1;
+      text-align: center;
+      font-family: 'ZCOOL KuaiLe', cursive;
+      font-size: 1.2rem;
+      letter-spacing: 0.05em;
+    }
+    .topbar-title .accent {
+      background: linear-gradient(135deg, var(--gold) 0%, var(--pink) 100%);
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .topbar-placeholder {
+      width: 70px;
+    }
+
+    /* ============================================
+       头部区
+       ============================================ */
+    .hero {
+      max-width: 800px;
+      margin: 60px auto 28px;
+      padding: 0 24px;
+      text-align: center;
+    }
+    .hero-tag {
+      display: inline-block;
+      padding: 4px 14px;
+      background: rgba(255, 214, 107, 0.12);
+      border: 1px solid rgba(255, 214, 107, 0.3);
+      color: var(--gold);
+      font-family: 'ZCOOL KuaiLe', cursive;
+      font-size: 0.82rem;
+      border-radius: 999px;
+      margin-bottom: 18px;
+      letter-spacing: 0.1em;
+    }
+    .hero-title {
+      font-family: 'ZCOOL KuaiLe', cursive;
+      font-size: 2.6rem;
+      color: var(--text);
+      margin-bottom: 12px;
+      line-height: 1.2;
+      text-shadow: 0 0 30px rgba(255, 214, 107, 0.3);
+    }
+    .hero-title .gold { color: var(--gold); }
+    .hero-sub {
+      color: var(--text-soft);
+      font-size: 1rem;
+      letter-spacing: 0.05em;
+    }
+    .hero-sub .sparkle {
+      color: var(--gold);
+      display: inline-block;
+      animation: sparkle 2s ease-in-out infinite;
+    }
+    @keyframes sparkle {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50%      { opacity: 1; transform: scale(1.3); }
+    }
+
+    /* ============================================
+       搜索框
+       ============================================ */
+    .search-wrap {
+      max-width: 600px;
+      margin: 0 auto 50px;
+      padding: 0 24px;
+    }
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 22px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 999px;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      transition: all 0.3s;
+    }
+    .search-box:focus-within {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 214, 107, 0.5);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
+                  0 0 0 4px rgba(255, 214, 107, 0.15),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+    .search-box svg {
+      width: 20px; height: 20px;
+      stroke: var(--text-soft); fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+      flex-shrink: 0;
+    }
+    .search-box:focus-within svg { stroke: var(--gold); }
+    .search-box input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text);
+      font-family: 'Noto Sans SC', sans-serif;
+      font-size: 1rem;
+    }
+    .search-box input::placeholder {
+      color: var(--text-mute);
+    }
+    .search-box .search-shortcut {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 6px;
+      color: var(--text-mute);
+      font-family: -apple-system, BlinkMacSystemFont, monospace;
+      font-size: 0.7rem;
+    }
+
+    /* ============================================
+       项目卡片网格
+       ============================================ */
+    .grid {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .repo-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 22px 20px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 18px;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      color: var(--text);
+      transition: all 0.25s;
+      overflow: hidden;
+    }
+    .repo-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 214, 107, 0.4), transparent);
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+    .repo-card:hover {
+      background: var(--glass-hover);
+      border-color: rgba(255, 214, 107, 0.4);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(91, 123, 245, 0.2);
+    }
+    .repo-card:hover::before { opacity: 1; }
+    .repo-card.is-placeholder {
+      opacity: 0.55;
+      border-style: dashed;
+    }
+    .repo-card.is-placeholder:hover {
+      opacity: 0.85;
+    }
+
+    .card-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .card-icon {
+      font-size: 1.6rem;
+      line-height: 1;
+      width: 40px; height: 40px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      flex-shrink: 0;
+    }
+    .card-title {
+      font-family: 'ZCOOL KuaiLe', cursive;
+      font-size: 1.1rem;
+      color: var(--text);
+      flex: 1;
+      line-height: 1.3;
+    }
+    .card-arrow {
+      color: var(--text-mute);
+      font-size: 1.1rem;
+      transition: all 0.25s;
+      margin-left: auto;
+    }
+    .repo-card:hover .card-arrow {
+      color: var(--gold);
+      transform: translateX(2px);
+    }
+    .card-desc {
+      color: var(--text-soft);
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: auto;
+      padding-top: 8px;
+      color: var(--text-mute);
+      font-size: 0.75rem;
+    }
+    .card-meta .tag {
+      padding: 2px 8px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 999px;
+    }
+    .card-meta .tag.live { color: #4ADE80; background: rgba(74, 222, 128, 0.1); }
+    .card-meta .tag.draft { color: var(--gold); background: rgba(255, 214, 107, 0.1); }
+
+    /* ============================================
+       底部
+       ============================================ */
+    .footer-note {
+      max-width: 600px;
+      margin: 48px auto 0;
+      padding: 0 24px;
+      text-align: center;
+      color: var(--text-mute);
+      font-size: 0.85rem;
+    }
+    .footer-note .dot {
+      display: inline-block;
+      width: 6px; height: 6px;
+      background: var(--gold);
+      border-radius: 50%;
+      margin: 0 8px;
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 0.4; transform: scale(0.9); }
+      50%      { opacity: 1; transform: scale(1.1); }
+    }
+
+    /* ============================================
+       响应式
+       ============================================ */
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .topbar { padding: 10px 14px; }
+      .topbar-title { font-size: 1rem; }
+      .back-home { padding: 4px 10px 4px 8px; font-size: 0.78rem; }
+      .back-home svg { width: 14px; height: 14px; }
+      .topbar-placeholder { width: 50px; }
+
+      .hero { margin: 36px auto 20px; padding: 0 16px; }
+      .hero-title { font-size: 2rem; }
+      .hero-sub { font-size: 0.9rem; }
+
+      .search-wrap { margin-bottom: 32px; padding: 0 14px; }
+      .search-box { padding: 12px 18px; }
+      .search-box input { font-size: 0.95rem; }
+      .search-box .search-shortcut { display: none; }
+
+      .grid { grid-template-columns: 1fr; gap: 14px; padding: 0 14px; }
+      .repo-card { padding: 18px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 星空背景 -->
+  <div class="starfield" aria-hidden="true">
+    <div class="stars stars-s"></div>
+    <div class="stars stars-m"></div>
+    <div class="stars stars-l"></div>
+    <div class="shooting-star"></div>
+    <div class="shooting-star s2"></div>
+  </div>
+
+  <!-- 顶部导航 -->
+  <nav class="topbar">
+    <a href="/creationplan/" class="back-home" aria-label="返回造物计划">
+      <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      <span>返回</span>
+    </a>
+    <h1 class="topbar-title">造物 <span class="accent">库</span></h1>
+    <div class="topbar-placeholder"></div>
+  </nav>
+
+  <!-- 头部 -->
+  <section class="hero">
+    <span class="hero-tag">✦ REPOSITORIES ✦</span>
+    <h2 class="hero-title">永不臣服于失控的世界<br><span class="gold">自由地追逐繁星</span></h2>
+  </section>
+
+  <!-- 搜索框 -->
+  <div class="search-wrap">
+    <label class="search-box" for="searchInput">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input type="text" id="searchInput" placeholder="搜索造物..." autocomplete="off" spellcheck="false">
+      <span class="search-shortcut">⌘ K</span>
+    </label>
+  </div>
+
+  <!-- 项目网格 -->
+  <main class="grid">
+    <a href="#" class="repo-card is-placeholder" target="_blank" rel="noopener noreferrer" onclick="return false;">
+      <div class="card-head">
+        <div class="card-title">Day 1</div>
+        <div class="card-arrow">→</div>
+      </div>
+      <div class="card-desc">100 天造物计划 · 期待你的创意</div>
+      <div class="card-meta">
+        <span class="tag draft">○ 待建</span>
+      </div>
+    </a>
+
+    <a href="#" class="repo-card is-placeholder" target="_blank" rel="noopener noreferrer" onclick="return false;">
+      <div class="card-head">
+        <div class="card-title">Day 2</div>
+        <div class="card-arrow">→</div>
+      </div>
+      <div class="card-desc">100 天造物计划 · 期待你的创意</div>
+      <div class="card-meta">
+        <span class="tag draft">○ 待建</span>
+      </div>
+    </a>
+
+    <a href="#" class="repo-card is-placeholder" target="_blank" rel="noopener noreferrer" onclick="return false;">
+      <div class="card-head">
+        <div class="card-title">Day 3</div>
+        <div class="card-arrow">→</div>
+      </div>
+      <div class="card-desc">100 天造物计划 · 期待你的创意</div>
+      <div class="card-meta">
+        <span class="tag draft">○ 待建</span>
+      </div>
+    </a>
+
+    <a href="#" class="repo-card is-placeholder" target="_blank" rel="noopener noreferrer" onclick="return false;">
+      <div class="card-head">
+        <div class="card-title">Day 4</div>
+        <div class="card-arrow">→</div>
+      </div>
+      <div class="card-desc">100 天造物计划 · 期待你的创意</div>
+      <div class="card-meta">
+        <span class="tag draft">○ 待建</span>
+      </div>
+    </a>
+
+    <a href="#" class="repo-card is-placeholder" target="_blank" rel="noopener noreferrer" onclick="return false;">
+      <div class="card-head">
+        <div class="card-title">Day 5</div>
+        <div class="card-arrow">→</div>
+      </div>
+      <div class="card-desc">100 天造物计划 · 期待你的创意</div>
+      <div class="card-meta">
+        <span class="tag draft">○ 待建</span>
+      </div>
+    </a>
+
+    <a href="#" class="repo-card is-placeholder" target="_blank" rel="noopener noreferrer" onclick="return false;">
+      <div class="card-head">
+        <div class="card-title">Day 6</div>
+        <div class="card-arrow">→</div>
+      </div>
+      <div class="card-desc">100 天造物计划 · 期待你的创意</div>
+      <div class="card-meta">
+        <span class="tag draft">○ 待建</span>
+      </div>
+    </a>
+  </main>
+
+  <!-- 底部 -->
+  <p class="footer-note">
+    暂无新项目<span class="dot"></span>后端就绪后自动加载
+  </p>
+
+  <script>
+    // 基础客户端搜索（按卡片标题 + 描述实时过滤）
+    (function() {
+      const input = document.getElementById('searchInput');
+      const cards = Array.from(document.querySelectorAll('.repo-card'));
+      if (!input) return;
+      input.addEventListener('input', (e) => {
+        const q = e.target.value.trim().toLowerCase();
+        cards.forEach(c => {
+          if (!q) { c.style.display = ''; return; }
+          const text = c.textContent.toLowerCase();
+          c.style.display = text.includes(q) ? '' : 'none';
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
