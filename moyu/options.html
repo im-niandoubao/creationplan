@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>摸鱼</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <main class="shell">
+    <section class="mast">
+      <p class="eyebrow">Chrome Extension</p>
+      <h1>摸鱼</h1>
+      <p class="subcopy">先摆好窗口，再进入自动摸鱼模式。</p>
+    </section>
+
+    <form id="settingsForm" class="panel" autocomplete="off">
+      <label class="field">
+        <span>工作网址</span>
+        <div class="url-row">
+          <input id="workUrl" name="workUrl" inputmode="url" placeholder="https://work.example.com" required>
+          <button class="bookmark-button" type="button" data-target="workUrl">收藏</button>
+        </div>
+      </label>
+
+      <label class="field">
+        <span>娱乐网址</span>
+        <div class="url-row">
+          <input id="funUrl" name="funUrl" inputmode="url" placeholder="https://www.bilibili.com" required>
+          <button class="bookmark-button" type="button" data-target="funUrl">收藏</button>
+        </div>
+      </label>
+
+      <div class="grid">
+        <label class="field">
+          <span>静止秒数</span>
+          <input id="idleSeconds" name="idleSeconds" type="number" min="2" max="60" step="1" required>
+        </label>
+      </div>
+
+      <div class="actions">
+        <button id="prepareButton" type="button" class="ghost">设置窗口</button>
+        <button type="submit" class="primary">启动</button>
+        <button id="stopButton" type="button" class="danger">停止</button>
+      </div>
+
+      <p id="status" class="status" role="status"></p>
+    </form>
+
+    <section id="bookmarkPicker" class="bookmark-panel" hidden>
+      <div class="bookmark-head">
+        <strong id="bookmarkTitle">选择网址</strong>
+        <button id="closeBookmarkPicker" class="close-button" type="button">关闭</button>
+      </div>
+      <input id="bookmarkSearch" type="search" placeholder="搜索收藏夹或网址">
+      <div id="bookmarkList" class="bookmark-list"></div>
+    </section>
+
+    <footer class="credit">Made by 粘豆包</footer>
+  </main>
+
+  <script src="options.js"></script>
+</body>
+</html>
