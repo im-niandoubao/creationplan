@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>2026 世界杯赛程推荐</title>
+    <script>
+      // 累计使用人次追踪（造物库：Day 1 = worldcup2026）
+      (function() {
+        try {
+          fetch('/creationplan/api/track-visit', {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ day: 1 }),
+            keepalive: true
+          });
+        } catch (e) {}
+      })();
+    </script>
+    <script type="module" crossorigin src="/creationplan/repositories/worldcup2026/assets/index-CWK7sZiA.js"></script>
+    <link rel="stylesheet" crossorigin href="/creationplan/repositories/worldcup2026/assets/index-D9sF5YbS.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

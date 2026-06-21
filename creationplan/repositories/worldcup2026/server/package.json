@@ -1,0 +1,14 @@
+{
+  "name": "worldcup2026-server",
+  "version": "1.0.0",
+  "private": true,
+  "description": "2026 世界杯赛程推荐 · 偏好解析 API 后端 — 独立 Node 进程，port 3003",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  }
+}

@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="输入你的出生日期和城市，回到爸爸第一次见你的那一天。"
+    />
+    <meta name="theme-color" content="#11100e" />
+    <title>那一天 · 爸爸第一次见我</title>
+    <script>
+      // 累计使用人次追踪（造物库：Day 7 = 那天，他第一次当爸爸）
+      (function() {
+        try {
+          fetch('/creationplan/api/track-visit', {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ day: 7 }),
+            keepalive: true
+          });
+        } catch (e) {}
+      })();
+    </script>
+    <script type="module" crossorigin src="/creationplan/repositories/myfather/assets/index-D1KNPJKe.js"></script>
+    <link rel="stylesheet" crossorigin href="/creationplan/repositories/myfather/assets/index-B8Kp6bVc.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
