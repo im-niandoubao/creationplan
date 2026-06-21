@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="输入一个微小改变，看看它在第 1、3、5、10 年可能留下什么。">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>十年显影 · 造物库</title>
+  <script>
+    // 累计使用人次追踪（造物库：Day 8 = 十年显影）
+    (function() {
+      try {
+        fetch('/creationplan/api/track-visit', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ day: 8 }),
+          keepalive: true
+        });
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css?v=4">
+</head>
+<body>
+  <div class="paper-noise" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <a class="back-link" href="/creationplan/repositories/" aria-label="返回造物库">
+      <span aria-hidden="true">←</span>
+      <span>造物库</span>
+    </a>
+    <p class="topbar-mark">DAY 08 · 时间观察室</p>
+    <button class="about-button" id="aboutButton" type="button">这是什么？</button>
+  </header>
+
+  <main>
+    <section class="hero" id="inputSection">
+      <div class="hero-copy">
+        <p class="eyebrow">THE LONG NOW · 未来十年</p>
+        <h1><span>把一个小的改变</span><em>放进时间里</em></h1>
+        <p class="hero-intro">
+          人们常常高估一两年的变化，却低估十年的变化。
+          写下一件你准备重复的小事，看看时间会怎样将它慢慢放大。
+        </p>
+      </div>
+
+      <form class="seed-form" id="seedForm">
+        <label for="changeInput">我想看看，如果我……</label>
+        <div class="input-shell">
+          <textarea
+            id="changeInput"
+            name="change"
+            rows="2"
+            maxlength="120"
+            placeholder="例如：每天看十分钟书"
+            required
+          ></textarea>
+          <span class="character-count"><span id="characterCount">0</span>/120</span>
+        </div>
+        <div class="form-footer">
+          <p>不需要写得标准，像平时说话一样就好。</p>
+          <button class="develop-button" type="submit">
+            <span>开始显影</span>
+            <span class="button-arrow" aria-hidden="true">↗</span>
+          </button>
+        </div>
+      </form>
+
+      <div class="examples" aria-label="示例">
+        <button type="button" data-example="每天看十分钟书">每天看十分钟书</button>
+        <button type="button" data-example="每天运动半小时">每天运动半小时</button>
+        <button type="button" data-example="每天喝一罐可乐">每天一罐可乐</button>
+        <button type="button" data-example="每天少刷半小时手机">少刷半小时手机</button>
+        <button type="button" data-example="每天存下20元">每天存下 20 元</button>
+      </div>
+
+      <div class="time-ruler" aria-hidden="true">
+        <span>今天</span>
+        <i></i>
+        <span>1 年</span>
+        <i></i>
+        <span>3 年</span>
+        <i></i>
+        <span>5 年</span>
+        <i></i>
+        <span>10 年</span>
+      </div>
+    </section>
+
+    <section class="developing" id="developing" hidden aria-live="polite">
+      <div class="developing-orbit" aria-hidden="true">
+        <span></span><span></span><span></span><span></span>
+      </div>
+      <p>正在让时间经过这里……</p>
+      <small id="developingHint">先计算积累，再观察它会触碰生活的哪些部分</small>
+    </section>
+
+    <section class="result" id="result" hidden>
+      <header class="result-header">
+        <div>
+          <p class="eyebrow">你的十年观察样本</p>
+          <h2 id="resultTitle"></h2>
+        </div>
+        <button class="restart-button" id="restartButton" type="button">换一个改变</button>
+      </header>
+
+      <div class="summary-card">
+        <p class="summary-kicker">十年后回看</p>
+        <blockquote id="summary"></blockquote>
+        <div class="total-row">
+          <span>按现实完成率估算</span>
+          <strong id="totalMetric"></strong>
+        </div>
+      </div>
+
+      <div class="future-layout">
+        <div class="rings-panel">
+          <div class="rings" id="rings" aria-label="选择未来年份">
+            <div class="ring-line ring-line-10" aria-hidden="true"></div>
+            <div class="ring-line ring-line-5" aria-hidden="true"></div>
+            <div class="ring-line ring-line-3" aria-hidden="true"></div>
+            <div class="ring-line ring-line-1" aria-hidden="true"></div>
+            <button class="year-ring ring-10" type="button" data-year="10" aria-label="查看第十年"><span>10</span><small>年</small></button>
+            <button class="year-ring ring-5" type="button" data-year="5" aria-label="查看第五年"><span>5</span><small>年</small></button>
+            <button class="year-ring ring-3" type="button" data-year="3" aria-label="查看第三年"><span>3</span><small>年</small></button>
+            <button class="year-ring ring-1 is-active" type="button" data-year="1" aria-label="查看第一年"><span>1</span><small>年</small></button>
+            <div class="ring-core" aria-hidden="true">此刻</div>
+          </div>
+          <p class="ring-instruction">点击年轮，看看改变长到哪里</p>
+        </div>
+
+        <article class="year-story" id="yearStory" aria-live="polite">
+          <div class="year-heading">
+            <div>
+              <p id="yearLabel">第一圈年轮</p>
+              <h3 id="yearTitle"></h3>
+            </div>
+            <strong id="yearNumber">01</strong>
+          </div>
+          <p class="year-narrative" id="yearNarrative"></p>
+          <dl class="year-details">
+            <div>
+              <dt>留下的刻度</dt>
+              <dd id="yearMetric"></dd>
+            </div>
+            <div>
+              <dt>开始蔓延</dt>
+              <dd id="yearTurningPoint"></dd>
+            </div>
+            <div class="caution">
+              <dt>别忽略</dt>
+              <dd id="yearCaution"></dd>
+            </div>
+          </dl>
+        </article>
+      </div>
+
+      <section class="dimensions-section">
+        <div class="section-heading">
+          <p class="eyebrow">它不只改变一件事</p>
+          <h3>十年影响切面</h3>
+        </div>
+        <div class="dimension-grid" id="dimensionGrid"></div>
+      </section>
+
+      <section class="assumptions-card">
+        <div>
+          <p class="eyebrow">这不是预言</p>
+          <h3><span>结果建立在</span><span>这些假设上</span></h3>
+        </div>
+        <ul id="assumptionList"></ul>
+      </section>
+
+      <footer class="result-footer">
+        <p id="closing"></p>
+        <button class="share-button" id="shareButton" type="button">复制这次显影结果</button>
+        <span class="share-feedback" id="shareFeedback" role="status"></span>
+      </footer>
+    </section>
+  </main>
+
+  <dialog class="about-dialog" id="aboutDialog">
+    <button class="dialog-close" id="dialogClose" type="button" aria-label="关闭">×</button>
+    <p class="eyebrow">关于十年显影</p>
+    <h2>它展示的是路径，<br>不是命运。</h2>
+    <p>
+      显影结果由两部分组成：可以计算的积累，以及基于常识的影响推演。
+      人的生活远比模型复杂，所以我们会写明假设、代价与不确定性。
+    </p>
+    <p>
+      真正值得注意的不是第十年的数字，而是一个小动作如何逐渐改变你的环境、
+      能力和“我是怎样的人”这件事。
+    </p>
+  </dialog>
+
+  <script src="./app.js?v=2"></script>
+</body>
+</html>
